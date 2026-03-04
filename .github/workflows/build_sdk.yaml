@@ -11,6 +11,7 @@ jobs:
     outputs:
       build-date: ${{ steps.vars.outputs.date }}
       entware-ref: ${{ steps.vars.outputs.ref }}
+      entware-arches: ${{ steps.vars.outputs.arches }}
     steps:
       - name: Checkout Entware
         uses: actions/checkout@v6
@@ -20,6 +21,8 @@ jobs:
       - id: vars
         name: Write job values
         run: |
+          ARCHERS=$(python3 -c 'from pathlib import Path; print([filename.stem for filename in Path("configs").iterdir()])')
+          echo "arches=$ARCHERS" >> "$GITHUB_OUTPUT"
           echo "ref=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           echo "date=$(date +'%Y.%m.%d')" >> "$GITHUB_OUTPUT"
 
@@ -30,8 +33,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        arch:
-        - aarch64-3.10
+        arch: ${{ fromJson(needs.prepare.outputs.entware-arches) }}
     env:
       DOCKER_IMAGE: ghcr.io/openwrt/buildbot/buildworker-v3.11.3:latest
 
