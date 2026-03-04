@@ -1,0 +1,24 @@
+name: Periodically check Entware changes
+
+on:
+  schedule:
+    # every 2nd saturday at 23:00 UTC
+    - cron: "0 23 8-14 * 6"
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: Check entware changes
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Entware
+        uses: actions/checkout@v6
+        with:
+          repository: Entware/Entware
+
+      - name: Triggger build sdk
+        uses: peter-evans/repository-dispatch@v4
+        with:
+          event-type: build-sdk

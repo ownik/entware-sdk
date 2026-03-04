@@ -1,6 +1,8 @@
 name: Build sdk
 
-on: workflow_dispatch
+on:
+  repository_dispatch:
+    types: [build-sdk]
 
 jobs:
   build:
