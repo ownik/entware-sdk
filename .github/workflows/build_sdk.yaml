@@ -1,0 +1,57 @@
+name: Build sdk
+
+on: workflow_dispatch
+
+jobs:
+  build:
+    name: Build sdk ${{ matrix.arch }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        arch:
+        - aarch64-3.10
+    env:
+      DOCKER_IMAGE: ghcr.io/openwrt/buildbot/buildworker-v3.11.3:latest
+
+    steps:
+      - name: Checkout self
+        uses: actions/checkout@v6
+
+      - name: Checkout Entware
+        uses: actions/checkout@v6
+        with:
+          repository: Entware/Entware
+          path: entware
+
+      - name: Aplly patches to build sdk
+        run: git apply $GITHUB_WORKSPACE/*.patch
+        working-directory: entware
+
+      - name: Pull builder docker image
+        run: docker pull $DOCKER_IMAGE
+
+      - name: Temporary change rights for GITHUB_WORKSPACE/entware
+        run: sudo chown -R 1000:1000 $GITHUB_WORKSPACE/entware
+        shell: bash
+
+      - name: Build entware sdk ${{ matrix.arch }}
+        run: >-
+          docker run --rm
+          -v $GITHUB_WORKSPACE/build_sdk.sh:/bin/build_sdk:ro
+          -v $GITHUB_WORKSPACE/entware:/builder/entware
+          -w /builder/entware
+          $DOCKER_IMAGE
+          /bin/build_sdk ${{ matrix.arch }}
+
+      - name: Restore rights for $GITHUB_WORKSPACE/entware
+        run: sudo chown -R --reference=$GITHUB_WORKSPACE $GITHUB_WORKSPACE/entware
+        shell: bash
+        if: always()
+
+      - name: Upload asset to release
+        uses: actions/upload-artifact@v7
+        with:
+          name: sdk-${{ matrix.arch }}
+          path: entware/bin/targets/${{ matrix.arch }}/*/entware-sdk-${{ matrix.arch }}*
+          if-no-files-found: error
