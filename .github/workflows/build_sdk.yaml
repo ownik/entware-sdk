@@ -96,7 +96,7 @@ jobs:
       - name: Update LastBuildRef.txt
         run: echo "${{ needs.prepare.outputs.entware-ref }}" > LastBuildRef.txt
 
-      - uses: stefanzweifel/git-auto-commit-action@v6
+      - uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "[auto] Build sdk ${{ needs.prepare.outputs.build-date }}"
           tag_name: 'v${{ needs.prepare.outputs.build-date }}'
