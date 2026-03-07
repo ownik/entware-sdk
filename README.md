@@ -9,6 +9,8 @@ does not publish prebuilt SDK archives.
 This repository fills that gap by automatically building and publishing
 ready-to-use SDK bundles.
 
+> 💡 If you want to build Entware packages via **GitHub Actions**, you can use the [gh-action-entware-sdk](https://github.com/ownik/gh-action-entware-sdk)
+
 ## 🚀 Why use this?
 
 Without a prebuilt SDK, building even a single Go package in GitHub
@@ -89,3 +91,8 @@ make defconfig
 ```bash
 make package/<PACKAGE_NAME>/compile
 ```
+
+# 🔗 Related Projects
+
++ **gh-action-entware-sdk** https://github.com/ownik/entware-sdk
++ **Entware project** https://github.com/Entware/Entware
