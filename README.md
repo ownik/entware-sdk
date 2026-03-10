@@ -94,5 +94,5 @@ make package/<PACKAGE_NAME>/compile
 
 # 🔗 Related Projects
 
-+ **gh-action-entware-sdk** https://github.com/ownik/entware-sdk
++ **gh-action-entware-sdk** https://github.com/ownik/gh-action-entware-sdk
 + **Entware project** https://github.com/Entware/Entware
