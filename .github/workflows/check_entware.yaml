@@ -14,13 +14,13 @@ jobs:
       contents: write
     steps:
       - name: Checkout Entware
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: Entware/Entware
           path: entware
 
       - name: Checkout LastBuildRef.txt
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           sparse-checkout: LastBuildRef.txt
           sparse-checkout-cone-mode: false
