@@ -3,11 +3,13 @@ name: Build sdk
 on:
   repository_dispatch:
     types: [build-sdk]
+  pull_request:
 
 jobs:
   prepare:
     name: Prepare sdk build
     runs-on: ubuntu-latest
+    environment: ${{ github.event_name == 'pull_request' && 'pr-approval' || '' }}
     outputs:
       build-date: ${{ steps.vars.outputs.date }}
       entware-ref: ${{ steps.vars.outputs.ref }}
@@ -85,6 +87,7 @@ jobs:
     needs:
       - prepare
       - build
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     permissions:
       contents: write
