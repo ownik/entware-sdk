@@ -51,6 +51,7 @@ jobs:
           path: entware
 
       - name: Aplly patches to build sdk
+        if: ${{ hashFiles('*.patch') != '' }}
         run: git apply $GITHUB_WORKSPACE/*.patch
         working-directory: entware
 
